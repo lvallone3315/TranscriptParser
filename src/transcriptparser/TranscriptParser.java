@@ -17,14 +17,21 @@ public class TranscriptParser {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        String s1 = "Now is the time";
-        String s2 = "For all good men";
-        String s3 = "To come: to the aid of their party";
+        String s1 = "a:Now is the time";
+        String s2 = "b: for all good men";
+        String s3 = "To come: to the aid of their party\n";
         Student student1 = new Student("student1");
-        student1.appendComment(s1);
-        student1.appendComment(s2);
-        student1.appendComment(s3);
+        student1.appendComment(parseTranscriptLine(s1)[1]);
+        student1.appendComment(parseTranscriptLine(s2)[1]);
+        student1.appendComment(parseTranscriptLine(s3)[1]);
         student1.printComments();
+    }
+    
+    // Helper function to parse input lines
+    static String[] parseTranscriptLine(String line) {
+        // syntax is <speaker name>:<comment> - don't worry about multiple :
+        String[] parsedLine = line.split(":",2);
+        return parsedLine;
     }
     
 }
