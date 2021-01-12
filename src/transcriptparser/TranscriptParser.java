@@ -1,3 +1,7 @@
+/* Zoom Transcript Parser
+ *    Groups comments from a Zoom transcript file by speaker
+ */
+
 package transcriptparser;
 
 import java.io.BufferedReader;
