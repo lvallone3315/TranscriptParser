@@ -25,6 +25,42 @@ public class TranscriptParser {
         student1.appendComment(parseTranscriptLine(s2)[1]);
         student1.appendComment(parseTranscriptLine(s3)[1]);
         student1.printComments();
+        
+        // Logic to parse lines, create or append to student instances
+        String[] s = new String[] {"abc: abc comment", "def: def comment", "abc: abc comment2",
+        "abc", "adf:", "adf: Hello World!", ":adf", "xyz abc", "uvw:"};
+        
+        // list of student instances already created
+        ArrayList<Student> students = new ArrayList<Student>();
+        
+        String[] transcriptLine;
+        for (String line:s) {  // will replace this with read from file - while not EOF
+            transcriptLine = parseTranscriptLine(line);
+            // If a valid transcript line (<name>:<text>)
+            // If instance already created, append text
+            // else create instance & append text
+            if (transcriptLine.length == 2) {
+                Boolean foundStudentName = false;
+                for (Student studentPointer:students) {
+                    if (studentPointer.getStudentName().equals(transcriptLine[0])) {
+                        studentPointer.appendComment(transcriptLine[1]);
+                        foundStudentName = true;
+                        break;
+                    }
+                }
+                if (!foundStudentName) { // create new student instance
+                    Student tempStudentPointer = new Student(transcriptLine[0]);
+                    students.add(tempStudentPointer);
+                    tempStudentPointer.appendComment(transcriptLine[1]);
+                }
+            }      
+        }
+        
+        // print results
+        for (Student studentPointer:students) {
+            studentPointer.printComments();
+            System.out.println();
+        }
     }
     
     // Helper function to parse input lines
@@ -46,6 +82,14 @@ class Student {
      */
     Student(String name) {
         studentName = name;
+    }
+    
+    /**
+     * getStudentName
+     * @return student name stored in instance
+     */
+    String getStudentName() {
+        return studentName;
     }
     
     /**
