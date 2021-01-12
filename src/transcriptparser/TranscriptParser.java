@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package transcriptparser;
 
 import java.io.BufferedReader;
@@ -20,6 +15,7 @@ import java.util.logging.Logger;
  */
 public class TranscriptParser {
     
+    final static String VERSION = "Zoom Transcript Parser v0.1"
     final static int MAX_FIELDS = 2;  // when splitting input, divide into MAX strings
     final static String INPUT_FILENAME = "test1.txt";  // transcript raw data
     final static int SNAME = 0;   // student name - index into parsed string
@@ -37,7 +33,7 @@ public class TranscriptParser {
         // stores parsed comment
         String[] transcriptLine;
 
-        
+        System.out.println(VERSION);
         // Default path in top directory of project - TranscriptParser
         File file = new File(INPUT_FILENAME); 
         BufferedReader br = null;   // assigned null to quiet compiler warning
@@ -51,10 +47,16 @@ public class TranscriptParser {
         // for (String line:s) {  // will replace this with read from file - while not EOF
         while ((line = br.readLine()) != null) {
             transcriptLine = parseTranscriptLine(line);
+            
+
             // If a valid transcript line (<name>:<text>)
             // If instance already created, append text
             // else create instance & append text
             if (transcriptLine.length == MAX_FIELDS) {
+                    // if > found in comment, then Zoom date string, ignore it
+                if (transcriptLine[COMMENT].indexOf('>') != -1)
+                    continue;
+                
                 Boolean foundStudentName = false;
                 for (Student studentPointer:students) {
                     if (studentPointer.getStudentName().equals(transcriptLine[SNAME])) {
