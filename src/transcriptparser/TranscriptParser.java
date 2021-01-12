@@ -5,53 +5,68 @@
  */
 package transcriptparser;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author lvall
  */
 public class TranscriptParser {
+    
+    final static int MAX_FIELDS = 2;  // when splitting input, divide into MAX strings
+    final static String INPUT_FILENAME = "test1.txt";  // transcript raw data
+    final static int SNAME = 0;   // student name - index into parsed string
+    final static int COMMENT = 1;   // student comment - index into parsed string
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        String s1 = "a:Now is the time";
-        String s2 = "b: for all good men";
-        String s3 = "To come: to the aid of their party\n";
-        Student student1 = new Student("student1");
-        student1.appendComment(parseTranscriptLine(s1)[1]);
-        student1.appendComment(parseTranscriptLine(s2)[1]);
-        student1.appendComment(parseTranscriptLine(s3)[1]);
-        student1.printComments();
-        
-        // Logic to parse lines, create or append to student instances
-        String[] s = new String[] {"abc: abc comment", "def: def comment", "abc: abc comment2",
-        "abc", "adf:", "adf: Hello World!", ":adf", "xyz abc", "uvw:"};
-        
-        // list of student instances already created
+    public static void main(String[] args) throws IOException {
+
+        // list of student instances - dynamically created & added to arraylist
         ArrayList<Student> students = new ArrayList<Student>();
-        
+        // stores each line of text read from file
+        String line;
+        // stores parsed comment
         String[] transcriptLine;
-        for (String line:s) {  // will replace this with read from file - while not EOF
+
+        
+        // Default path in top directory of project - TranscriptParser
+        File file = new File(INPUT_FILENAME); 
+        BufferedReader br = null;   // assigned null to quiet compiler warning
+        try {
+            br = new BufferedReader(new FileReader(file));
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(TranscriptParser.class.getName()).log(Level.SEVERE, null, ex);
+            System.exit(-1);
+        }
+        
+        // for (String line:s) {  // will replace this with read from file - while not EOF
+        while ((line = br.readLine()) != null) {
             transcriptLine = parseTranscriptLine(line);
             // If a valid transcript line (<name>:<text>)
             // If instance already created, append text
             // else create instance & append text
-            if (transcriptLine.length == 2) {
+            if (transcriptLine.length == MAX_FIELDS) {
                 Boolean foundStudentName = false;
                 for (Student studentPointer:students) {
-                    if (studentPointer.getStudentName().equals(transcriptLine[0])) {
-                        studentPointer.appendComment(transcriptLine[1]);
+                    if (studentPointer.getStudentName().equals(transcriptLine[SNAME])) {
+                        studentPointer.appendComment(transcriptLine[COMMENT]);
                         foundStudentName = true;
                         break;
                     }
                 }
                 if (!foundStudentName) { // create new student instance
-                    Student tempStudentPointer = new Student(transcriptLine[0]);
+                    Student tempStudentPointer = new Student(transcriptLine[SNAME]);
                     students.add(tempStudentPointer);
-                    tempStudentPointer.appendComment(transcriptLine[1]);
+                    tempStudentPointer.appendComment(transcriptLine[COMMENT]);
                 }
             }      
         }
@@ -66,7 +81,7 @@ public class TranscriptParser {
     // Helper function to parse input lines
     static String[] parseTranscriptLine(String line) {
         // syntax is <speaker name>:<comment> - don't worry about multiple :
-        String[] parsedLine = line.split(":",2);
+        String[] parsedLine = line.split(":",MAX_FIELDS);
         return parsedLine;
     }
     
