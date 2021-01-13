@@ -1,4 +1,5 @@
-/* Zoom Transcript Parser
+/**
+ * Zoom Transcript Parser
  *    Groups comments from a Zoom transcript file by speaker
  */
 
@@ -19,9 +20,9 @@ import java.util.logging.Logger;
  */
 public class TranscriptParser {
     
-    final static String VERSION = "Zoom Transcript Parser v0.1"
+    final static String VERSION = "Zoom Transcript Parser v0.2";
     final static int MAX_FIELDS = 2;  // when splitting input, divide into MAX strings
-    final static String INPUT_FILENAME = "test1.txt";  // transcript raw data
+    final static String INPUT_FILENAME = "test1.vtt";  // transcript raw data
     final static int SNAME = 0;   // student name - index into parsed string
     final static int COMMENT = 1;   // student comment - index into parsed string
 
