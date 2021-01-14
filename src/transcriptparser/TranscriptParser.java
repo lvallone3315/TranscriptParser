@@ -20,7 +20,8 @@ import java.util.logging.Logger;
  */
 public class TranscriptParser {
     
-    final static String VERSION = "Zoom Transcript Parser v0.2";
+    final static String VERSION = "Zoom Transcript Parser v0.3";
+    
     final static int MAX_FIELDS = 2;  // when splitting input, divide into MAX strings
     final static String INPUT_FILENAME = "test1.vtt";  // transcript raw data
     final static int SNAME = 0;   // student name - index into parsed string
@@ -83,6 +84,13 @@ public class TranscriptParser {
             studentPointer.printComments();
             System.out.println();
         }
+        
+        // print summary of # lines of comments per student
+        System.out.println("Comment Line Summaries");
+        for (Student studentPointer:students) {
+            System.out.printf ("%25s:\t%d\n", studentPointer.getStudentName(),
+                    studentPointer.getNumComments());
+        }
     }
     
     // Helper function to parse input lines
@@ -110,8 +118,16 @@ class Student {
      * getStudentName
      * @return student name stored in instance
      */
-    String getStudentName() {
+    public String getStudentName() {
         return studentName;
+    }
+    
+    /**
+     * getNumComments()
+     * @return # of lines in transcript attributable to student
+     */
+    public int getNumComments() {
+        return(comments.size());
     }
     
     /**
