@@ -1,6 +1,8 @@
 /**
  * Zoom Transcript Parser
  *    Groups comments from a Zoom transcript file by speaker
+ * 
+ * Command line argument: <optional> - transcript filename
  */
 
 package transcriptparser;
@@ -20,10 +22,10 @@ import java.util.logging.Logger;
  */
 public class TranscriptParser {
     
-    final static String VERSION = "Zoom Transcript Parser v0.3";
+    final static String VERSION = "Zoom Transcript Parser v0.4";
     
     final static int MAX_FIELDS = 2;  // when splitting input, divide into MAX strings
-    final static String INPUT_FILENAME = "test1.vtt";  // transcript raw data
+    final static String DEFAULT_INPUT_FILENAME = "transcript.vtt";  // transcript raw data
     final static int SNAME = 0;   // student name - index into parsed string
     final static int COMMENT = 1;   // student comment - index into parsed string
 
@@ -32,6 +34,8 @@ public class TranscriptParser {
      */
     public static void main(String[] args) throws IOException {
 
+        // input filename
+        String inputFilename = DEFAULT_INPUT_FILENAME;
         // list of student instances - dynamically created & added to arraylist
         ArrayList<Student> students = new ArrayList<Student>();
         // stores each line of text read from file
@@ -40,8 +44,15 @@ public class TranscriptParser {
         String[] transcriptLine;
 
         System.out.println(VERSION);
+        
+        // args[0] if present is input filename, if not use default
+        if (args.length > 0) {
+            inputFilename = args[0];
+        }
         // Default path in top directory of project - TranscriptParser
-        File file = new File(INPUT_FILENAME); 
+        File file = new File(inputFilename);
+        String path = file.getAbsolutePath();
+        System.out.printf("Transcript File: %s\n\n", path);
         BufferedReader br = null;   // assigned null to quiet compiler warning
         try {
             br = new BufferedReader(new FileReader(file));
