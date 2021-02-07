@@ -3,6 +3,7 @@
  *    Groups comments from a Zoom transcript file by speaker
  * 
  * Command line argument: <optional> - transcript filename
+ *    adding a comment line
  */
 
 package transcriptparser;
