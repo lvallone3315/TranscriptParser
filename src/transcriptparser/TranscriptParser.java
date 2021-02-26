@@ -1,6 +1,6 @@
 /**
  * Zoom Transcript Parser <br>
- *    Groups comments from a Zoom transcript file by speaker
+ *    Group comments from a Zoom transcript file by speaker
  * <P>
  * Command line argument: <optional> - transcript filename
  */
@@ -17,17 +17,22 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Zoom Transcript Parser <br>
+ *    Groups comments from a Zoom transcript file by speaker
+ * <P>
+ * Command line argument: [optional] - transcript filename
  *
  * @author lvall
  */
 public class TranscriptParser {
     
-    final static String VERSION = "Zoom Transcript Parser v0.4";
+    final static String VERSION = "Zoom Transcript Parser v0.5";
     
     final static int MAX_FIELDS = 2;  // when splitting input, divide into MAX strings
     final static String DEFAULT_INPUT_FILENAME = "transcript.vtt";  // transcript raw data
     final static int SNAME = 0;   // student name - index into parsed string
     final static int COMMENT = 1;   // student comment - index into parsed string
+    final static String COMMENT_DELIMITER = ":";
 
     /**
      * main() for transcript parser<br>
@@ -41,6 +46,8 @@ public class TranscriptParser {
      * 
      * @param args [optional] Zoom transcript file name (relative or absolute path) <br>
      *    if no argument specified, uses default filename (v0.4 = transcript.vtt)
+     * 
+     * @throws IOException if input file not accessible
      */
     public static void main(String[] args) throws IOException {
 
@@ -128,78 +135,11 @@ public class TranscriptParser {
     }
     
     // Helper function to parse input lines
-    //   ToDo: delimiter hardcoded to ":", move to constant in main class declaration section
+
     static String[] parseTranscriptLine(String line) {
         // syntax is <speaker name>:<comment> - don't worry about multiple :
-        String[] parsedLine = line.split(":",MAX_FIELDS);
+        String[] parsedLine = line.split(COMMENT_DELIMITER,MAX_FIELDS);
         return parsedLine;
     }
     
 }  // end class - TranscriptParser
-
-/**
- * Student class - each instance = one speaker (aka student)
- *   externally - keyed on student name, each unique name will construct a new student instance
- *   maintains a list of comments (Strings) for the speaker
- *     implemented as an ArrayList - no limit on # comments
- * 
- * Supports:
- *   Retrieving student name (specified when instance created)
- *   Storing comments attributed to the student
- *   Retrieving the # of comments attributed to the student (integer)
- *   Printing all comments to the console
- * 
- * ToDo: move Student class to separate file
- *   
- * @author lvall
- */
-class Student {
-    String studentName;
-    ArrayList<String> comments = new ArrayList<String>();
-    
-    /**
-     * Student() constructor
-     * @param name - name of student (required)
-     */
-    Student(String name) {
-        studentName = name;
-    }
-    
-    /**
-     * getStudentName
-     * @return student name stored in instance
-     */
-    public String getStudentName() {
-        return studentName;
-    }
-    
-    /**
-     * getNumComments()
-     * @return # of lines in transcript attributable to student
-     */
-    public int getNumComments() {
-        return(comments.size());
-    }
-    
-    /**
-     * appendComment - saves comment for this student
-     * @param comment - comment to store in memory
-     */
-    void appendComment(String comment) {
-        comments.add(comment);
-    }
-    
-    
-    /**
-     * printComments() - print to console all comments for this student instance
-     * Note: for now, assume no new lines embedded (ie use println)
-     * ToDo: instead of printing, return string (a really big one) to caller
-     *   Reason for hesitating: string might be huge - need to check if any limits
-     */
-    void printComments() {
-        System.out.println(studentName);
-        for (String printString:comments) {
-            System.out.println(printString);
-        }
-    }
-}  // end Student Class
