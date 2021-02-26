@@ -33,7 +33,7 @@ public class FileSave {
     BufferedWriter bufferedWritePointer;
 
     // Constructors - two flavors
-    //   default file name & user specified file name
+    //   default file name and user specified file name
     //   if file cannot be opened for writing, set filePointer = null
     public FileSave () {        
         this(DEFAULT_FILE_NAME);
@@ -46,7 +46,7 @@ public class FileSave {
     
     /**
      * Open named file for creation/append
-     *    Sets filePointer to File & bufferedWritePointer to file position or
+     *    Sets filePointer to File and bufferedWritePointer to file position or
      *    null if cannot open file
      * @param fileName - file name (Sting) to open for appending
      * @return FileWriter - pointer to open file
